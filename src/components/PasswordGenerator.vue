@@ -5,8 +5,8 @@
   <body>
     <section class="pw-result">
       <p id="generated-password">{{ generatedPassword }}</p>
-      <button @click="copiedPassword">Copy to Clipboard</button>
-      <p class="succes-generated-pw">
+      <button @click="copiedPassword()">&#10063;Copy to Clipboard</button>
+      <p id="succes-generated-pw" class="succes-generated-pw">
         Password was succesfully copied to your clipboard!
       </p>
     </section>
@@ -84,6 +84,17 @@ export default {
         );
       }
       return this.generatedPassword;
+    },
+    copiedPassword() {
+      let Message = document.getElementById("succes-generated-pw");
+      let password = document.getElementById("generated-password").innerText;
+
+      navigator.clipboard.writeText(password);
+      Message.style.opacity = "1";
+      setTimeout(function () {
+        Message.style.opacity = "0";
+      }, 3500);
+      alert("copied the text:" + Message);
     },
   },
   mounted() {
