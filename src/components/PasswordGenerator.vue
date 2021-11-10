@@ -148,9 +148,22 @@ button {
 .container {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
   gap: 1rem;
 }
+@media screen and (max-width: 600px) {
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+@media screen and (max-width: 600px) {
+  article section {
+    padding: 10px;
+    font-size: 40px;
+    flex: 2 2;
+  }
+}
+
 .pw-setcheck input[type="checkbox"] {
   display: none;
 }
