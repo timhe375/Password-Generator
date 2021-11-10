@@ -38,6 +38,13 @@ html {
   font-family: "Arvo";
   font-size: 20px;
 }
+h1 {
+  padding: 1rem 0;
+}
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
 body {
   text-align: center;
   background: var(--color-dark);
