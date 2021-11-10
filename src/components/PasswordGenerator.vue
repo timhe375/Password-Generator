@@ -4,15 +4,15 @@
   </header>
   <body>
     <section class="pw-result">
-      <p>genereriertes PW</p>
-      <button>Copy to Clipboard</button>
+      <p id="generated-password">{{ generatedPassword }}</p>
+      <button @click="copiedPassword">Copy to Clipboard</button>
       <p class="succes-generated-pw">
         Password was succesfully copied to your clipboard!
       </p>
     </section>
   </body>
   <form onsubmit="return false">
-    <div class="pw-setcheck">
+    <main class="pw-setcheck">
       <p>Choose your character set:</p>
       <article class="container">
         <section class="lowercase">
@@ -22,23 +22,23 @@
           >
         </section>
         <section class="uppercase">
-          <input type="checkbox" id="pw-touppercase" checked />
+          <input type="checkbox" id="pw-touppercase" />
           <label for="pw-touppercase" class="container-category"
             >Uppercase</label
           >
         </section>
         <section class="numbers">
-          <input type="checkbox" id="pw-numbers" checked />
+          <input type="checkbox" id="pw-numbers" />
           <label for="pw-numbers" class="container-category">Numbers</label>
         </section>
         <section class="special">
-          <input type="checkbox" id="pw-speacialchar" checked />
+          <input type="checkbox" id="pw-speacialchar" />
           <label for="pw-speacialchar" class="container-category"
             >Symbols</label
           >
         </section>
       </article>
-    </div>
+    </main>
     <section class="slider">
       <label for="pw-length">Password Lenght:</label><br />
       <input
@@ -48,8 +48,10 @@
         max="35"
         step="1"
         class="pw-length-slider"
+        :value="value"
+        @input="updateValue()"
       />
-      <label for="pw-symbols" class="slider-value">35</label>
+      <label for="pw-length" class="slider-value">{{ value }}</label>
     </section>
   </form>
 </template>
@@ -57,7 +59,36 @@
 <script>
 export default {
   name: "PasswordGenerator",
+  data() {
+    return {
+      value: 8,
+      generatedPassword: "",
+    };
+  },
+
   props: {},
+  methods: {
+    updateValue() {
+      this.value = document.getElementById("pw-length").value;
+      return this.generatePassword(this.value);
+    },
+    generatePassword() {
+      let length = this.value;
+      let charSet =
+        "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      this.generatedPassword = "";
+
+      for (let i = 0; i < length; i++) {
+        this.generatedPassword += charSet.charAt(
+          Math.floor(Math.random() * charSet.length)
+        );
+      }
+      return this.generatedPassword;
+    },
+  },
+  mounted() {
+    this.generatePassword();
+  },
 };
 </script>
 
