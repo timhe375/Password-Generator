@@ -5,7 +5,7 @@
   <body>
     <section class="pw-result">
       <p id="generated-password">{{ generatedPassword }}</p>
-      <button @click="copiedPassword()">&#10063;Copy to Clipboard</button>
+      <button @click="copiedPassword">&#10063;Copy to Clipboard</button>
       <p id="succes-generated-pw" class="succes-generated-pw">
         Password was succesfully copied to your clipboard!
       </p>
@@ -53,8 +53,7 @@
         max="35"
         step="1"
         class="pw-length-slider"
-        :value="value"
-        @input="updateValue()"
+        v-model="value"
       />
       <label for="pw-length" class="slider-value">{{ value }}</label>
     </section>
@@ -67,7 +66,6 @@ export default {
   data() {
     return {
       value: 8,
-      generatedPassword: "",
       toLowerCase: true,
       toUpperCase: false,
       numberChar: false,
@@ -81,10 +79,25 @@ export default {
       this.value = document.getElementById("pw-length").value;
       return this.generatePassword(this.value);
     },
-    generatePassword() {
+    async copiedPassword() {
+      const successMessage = document.getElementById("succes-generated-pw");
+      let password = document.getElementById("generated-password").innerText;
+      try {
+        await navigator.clipboard.writeText(password);
+        successMessage.style.opacity = "1";
+        setTimeout(function () {
+          successMessage.style.opacity = "0";
+        }, 3500);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+  },
+  computed: {
+    generatedPassword() {
       let length = this.value;
       let charSet = "";
-      this.generatedPassword = "";
+      let generatedPassword = "";
 
       if (this.toLowerCase) {
         charSet += "abcdefghijklmnopqrstuvwxyz";
@@ -100,27 +113,16 @@ export default {
       }
 
       for (let i = 0; i < length; i++) {
-        this.generatedPassword += charSet.charAt(
+        generatedPassword += charSet.charAt(
           Math.floor(Math.random() * charSet.length)
         );
       }
-      return this.generatedPassword;
-    },
-    copiedPassword() {
-      let Message = document.getElementById("succes-generated-pw");
-      let password = document.getElementById("generated-password").innerText;
-
-      navigator.clipboard.writeText(password);
-      Message.style.opacity = "1";
-      setTimeout(function () {
-        Message.style.opacity = "0";
-      }, 3500);
-      alert("copied the text:" + Message);
+      return generatedPassword;
     },
   },
-  mounted() {
-    this.generatePassword();
-  },
+  // mounted() {
+  //   this.generatedPassword();
+  // },
 };
 </script>
 
