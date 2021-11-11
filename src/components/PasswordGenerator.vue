@@ -16,23 +16,28 @@
       <p>Choose your character set:</p>
       <article class="container">
         <section class="lowercase">
-          <input type="checkbox" id="pw-tolowercase" checked />
+          <input
+            type="checkbox"
+            id="pw-tolowercase"
+            checked
+            v-model="toLowerCase"
+          />
           <label for="pw-tolowercase" class="container-category"
             >Lowercase</label
           >
         </section>
         <section class="uppercase">
-          <input type="checkbox" id="pw-touppercase" />
+          <input type="checkbox" id="pw-touppercase" v-model="toUpperCase" />
           <label for="pw-touppercase" class="container-category"
             >Uppercase</label
           >
         </section>
         <section class="numbers">
-          <input type="checkbox" id="pw-numbers" />
+          <input type="checkbox" id="pw-numbers" v-model="numberChar" />
           <label for="pw-numbers" class="container-category">Numbers</label>
         </section>
         <section class="special">
-          <input type="checkbox" id="pw-speacialchar" />
+          <input type="checkbox" id="pw-speacialchar" v-model="symbolChar" />
           <label for="pw-speacialchar" class="container-category"
             >Symbols</label
           >
@@ -63,6 +68,10 @@ export default {
     return {
       value: 8,
       generatedPassword: "",
+      toLowerCase: true,
+      toUpperCase: false,
+      numberChar: false,
+      symbolChar: false,
     };
   },
 
@@ -74,9 +83,21 @@ export default {
     },
     generatePassword() {
       let length = this.value;
-      let charSet =
-        "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      let charSet = "";
       this.generatedPassword = "";
+
+      if (this.toLowerCase) {
+        charSet += "abcdefghijklmnopqrstuvwxyz";
+      }
+      if (this.toUpperCase) {
+        charSet += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      }
+      if (this.numberChar) {
+        charSet += "0123456789";
+      }
+      if (this.symbolChar) {
+        charSet += "!#$%&*+,-./:;<=>?@[]^_{|}~";
+      }
 
       for (let i = 0; i < length; i++) {
         this.generatedPassword += charSet.charAt(
